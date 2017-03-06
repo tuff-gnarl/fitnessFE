@@ -1,0 +1,45 @@
+<!--/**-->
+<!--* Created by Tuff_gnarl1 on 19.09.15.-->
+<!--*/-->
+<div id="slideout">
+    <div id="slideText">Датчик</div>
+    <div id="slideout_inner">
+        <div class="row">
+            <div class="col-md-12 text-align-center">
+                <div ng-show="clientsViewCtrl.sensorInfo.sensorIsInit && clientsViewCtrl.sensorInfo.bridgeIsConnected && clientsViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-success">Активен и готов к работе</label>
+                    </h4>
+                </div>
+
+                <div ng-show="!clientsViewCtrl.sensorInfo.sensorIsInit && clientsViewCtrl.sensorInfo.bridgeIsConnected && clientsViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-danger">Не активен</label>
+                    </h4>
+                </div>
+
+                <div ng-show="clientsViewCtrl.sensorInfo.bridgeIsConnected && !clientsViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-danger">Ошибка соединения.Код 2.</label>
+                    </h4>
+                </div>
+                <div ng-show="!clientsViewCtrl.sensorInfo.bridgeIsConnected && !clientsViewCtrl.sensorInfo.sensorIsConnected && !clientsViewCtrl.sensorInfo.sensorIsInit">
+                    <h4>
+                        <label class="label label-danger">Ошибка соединения. Код 1.</label>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-disabled="!clientsViewCtrl.sensorInfo.bridgeIsConnected || !clientsViewCtrl.sensorInfo.sensorIsConnected"
+                        ng-show="!clientsViewCtrl.sensorInfo.sensorIsInit" class="btn btn-success"
+                        ng-click="clientsViewCtrl.connectSensorBtnClick()">Активировать
+                </button>
+                <button ng-show="clientsViewCtrl.sensorInfo.sensorIsInit && clientsViewCtrl.sensorInfo.bridgeIsConnected && clientsViewCtrl.sensorInfo.sensorIsConnected"
+                        ng-click="clientsViewCtrl.connectSensorBtnClick()" class="btn btn-danger">Деактивировать
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

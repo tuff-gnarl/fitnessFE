@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru" ng-app="root">
+<head>
+    <meta charset="UTF-8">
+    <!-- TODO styles-->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="sources/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/angular/angular-csp.css">
+    <link rel="stylesheet" href="bower_components/angular-ui-switch/angular-ui-switch.min.css">
+
+    <!-- TODO Main scripts -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular1/angular.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_components/ng-websocket/ng-websocket.js"></script>
+    <script src="bower_components/angular-ui-switch/angular-ui-switch.min.js"></script>
+    <script src="bower_components/webcamjs/webcam.min.js"></script>
+    <script src="bower_components/ng-camera/dist/ng-camera.js"></script>
+    <script src="bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.min.js"></script>
+    <script src="bower_components/underscore/underscore-min.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+    <script src="bower_components/smart-Table-master/dist/smart-table.min.js"></script>
+    <!--<script src="bower_components/angular-camera-develop/dist/angular-camera.min.js"></script>-->
+
+    <!-- TODO APP SCRIPTS-->
+    <script src="sources/app.js"></script>
+    <script src="sources/main/mainCtrl.js"></script>
+    <script src="sources/auth/authCtrl.js"></script>
+    <script src="sources/clients/clientsCtrl.js"></script>
+    <script src="sources/clients/clientsReg/clientsRegCtrl.js"></script>
+
+    <!-- TODO ADMINISTRATION-->
+    <script src="sources/administration/administrationCtrl.js"></script>
+    <script src="sources/administration/employee/employeeCtrl.js"></script>
+    <script src="sources/administration/clients/clientsCtrl.js"></script>
+
+
+    <title>Eco Fitness</title>
+</head>
+<body>
+<div class="container-fluid full-height-main-wrapper">
+    <div ui-view="menuView"></div>
+    <div ui-view="contentView"></div>
+</div>
+
+</body>
+
+</html>

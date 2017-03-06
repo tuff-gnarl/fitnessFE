@@ -1,0 +1,30 @@
+<!--/**-->
+<!--* Created by Tuff_gnarl1 on 19.09.15.-->
+<!--*/-->
+<div class="container">
+    <form class="form-signing text-center">
+        <div class="signing-logo-block">
+            <img src="images/logo.jpg" class="signing-logo-block-image">
+        </div>
+        <label ng-show="authViewCtrl.authError && !authViewCtrl.authProcessing" class="label label-danger">
+            Неправильный логин или пароль
+        </label>
+
+        <div class="form-group">
+            <br>
+            <input type="text" class="form-control" placeholder="Логин" ng-model="authViewCtrl.login">
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" placeholder="Пароль" ng-model="authViewCtrl.password">
+        </div>
+        <button class="btn btn-primary width-100"
+                ng-click="authViewCtrl.onLoginButtonClick(authViewCtrl.login, authViewCtrl.password)">
+            <span ng-show="!authViewCtrl.authProcessing">
+                Войти
+            </span>
+            <span ng-show="authViewCtrl.authProcessing">
+               <span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Загрузка...
+            </span>
+        </button>
+    </form>
+</div>

@@ -1,0 +1,70 @@
+<!--/**-->
+<!--* Created by Tuff_gnarl1 on 19.09.15.-->
+<!--*/-->
+<nav class="navbar navbar-inverse">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#/main">Отдел продаж</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a ui-sref-active="active" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                   aria-haspopup="true" aria-expanded="false">Клиенты<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li ui-sref-active="active"><a ui-sref="clients">Обзор клиентов</a></li>
+                    <li ui-sref-active="active"><a ui-sref="clientsReg">Добавление нового клиента</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div id="slideout">
+    <div id="slideText">Датчик</div>
+    <div id="slideout_inner">
+        <div class="row">
+            <div class="col-md-12 text-align-center">
+                <div ng-show="mainViewCtrl.sensorInfo.sensorIsInit && mainViewCtrl.sensorInfo.bridgeIsConnected && mainViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-success">Активен и готов к работе</label>
+                    </h4>
+                </div>
+
+                <div ng-show="!mainViewCtrl.sensorInfo.sensorIsInit && mainViewCtrl.sensorInfo.bridgeIsConnected && mainViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-danger">Не активен</label>
+                    </h4>
+                </div>
+
+                <div ng-show="mainViewCtrl.sensorInfo.bridgeIsConnected && !mainViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-danger">Ошибка соединения.Код 2.</label>
+                    </h4>
+                </div>
+                <div ng-show="!mainViewCtrl.sensorInfo.bridgeIsConnected && !mainViewCtrl.sensorInfo.sensorIsConnected && !mainViewCtrl.sensorInfo.sensorIsInit">
+                    <h4>
+                        <label class="label label-danger">Ошибка соединения. Код 1.</label>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-disabled="!mainViewCtrl.sensorInfo.bridgeIsConnected || !mainViewCtrl.sensorInfo.sensorIsConnected"
+                        ng-show="!mainViewCtrl.sensorInfo.sensorIsInit" class="btn btn-success"
+                        ng-click="mainViewCtrl.connectSensorBtnClick()">Активировать
+                </button>
+                <button ng-show="mainViewCtrl.sensorInfo.sensorIsInit && mainViewCtrl.sensorInfo.bridgeIsConnected && mainViewCtrl.sensorInfo.sensorIsConnected"
+                        ng-click="mainViewCtrl.connectSensorBtnClick()" class="btn btn-danger">Деактивировать
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,770 @@
+<!--/**-->
+<!--* Created by Tuff_gnarl1 on 19.09.15.-->
+<!--*/-->
+<!--Modal PHOTO-->
+<script type="text/ng-template" id="ModalPhotoView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Фото клиента</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <!--<a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>-->
+                <ng-camera ng-show="!photo"
+                           viewer-height="400"
+                           viewer-width="400"
+                           crop-height="400"
+                           crop-width="400"
+                           image-format="jpeg"
+                           action-message="Take picture"
+                           snapshot="photo">
+                </ng-camera>
+                <img class="client-photo-modal-frame" ng-show="photo" ng-src="{{photo}}" alt="webcam picture">
+                <button class="btn btn-default" ng-show="photo" ng-click="retakePhoto()">Переснять <span
+                        style="top: 2.4px"
+                        class="glyphicon glyphicon-facetime-video"></span></button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-disabled="!photo" class="btn btn-success" type="button" ng-click="ok()">Сохранить <span
+                class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отменить <span style="top: 2.5px"
+                                                                                        class="glyphicon glyphicon-remove"></span></span>
+        </button>
+    </div>
+</script>
+<!--MODAL DEPOSIT-->
+<script type="text/ng-template" id="ModalDepositView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Пополнение депозита</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group form-group-sm">
+                    <label for="depositIncreaseValue">Увеличить депозит на</label>
+                    <input type="number" class="form-control"
+                           id="depositIncreaseValue" placeholder="100"
+                           ng-model="depositIncreaseValue">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="button" ng-click="ok()"><span
+                class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()"><span style="top: 2.5px"
+                                                                                class="glyphicon glyphicon-remove"></span></span>
+        </button>
+    </div>
+</script>
+<!--MODAL STATUS-EDITING-->
+<script type="text/ng-template" id="ModalStatusEditingView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Изменение статуса</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group form-group-sm">
+                    <label for="status-modal"> </label>
+                    <select class="form-control"
+                            id="status-modal"
+                            ng-model="status">
+                        <option>Активен</option>
+                        <option>В отпуске</option>
+                        <option>Уволен</option>
+                    </select>
+                </div>
+                <!--<div ng-show="administrationClientsViewCtrl.selectedClient.status=='active'">-->
+
+                <!--</div>-->
+                <!--<div ng-show="status=='dismissed'">-->
+
+                <!--</div>-->
+                <!--<div ng-show="administrationClientsViewCtrl.selectedClient.status=='vacation'">-->
+
+                <!--</div>-->
+                <!--<label class="label label-danger"-->
+                <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='dismissed'"><span-->
+                <!--style="font-size: 13px">Уволен {{administrationClientsViewCtrl.selectedClient.dismissal_date | date:'dd.MM.yyyy'}} <br> Причина: {{administrationClientsViewCtrl.selectedClient.dismissed_cause}} </span></label>-->
+                <!--<label class="label label-success"-->
+                <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='active'"><span-->
+                <!--style="font-size: 15px"> Активен </span></label>-->
+                <!--<label class="label label-warning"-->
+                <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='vacation'"><span-->
+                <!--style="font-size: 15px"> В отпуске с {{administrationClientsViewCtrl.selectedClient.vacation_date_start | date:'dd.MM.yyyy'}} по {{administrationClientsViewCtrl.selectedClient.vacation_date_end | date:'dd.MM.yyyy'}} </span></label>-->
+
+                <label class="label label-danger"
+                       ng-show="administrationClientsViewCtrl.selectedClient.status=='dismissed'"><span
+                        style="font-size: 13px"> Уволен</span></label>
+                <label class="label label-success"
+                       ng-show="administrationClientsViewCtrl.selectedClient.status=='active'"><span
+                        style="font-size: 15px"> Активен</span></label>
+                <label class="label label-warning"
+                       ng-show="administrationClientsViewCtrl.selectedClient.status=='vacation'"><span
+                        style="font-size: 15px"> В отпуске </span></label>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="button" ng-click="ok()">Сохранить <span
+                class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отменить <span style="top: 2.5px"
+                                                                                        class="glyphicon glyphicon-remove"></span></span>
+        </button>
+    </div>
+</script>
+<!--MODAL SENSOR-->
+<script type="text/ng-template" id="ModalSensorView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Регистрация отпечатка пальца</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-show="sensorInfo.sensorRegisterMode.status">
+            <h3 ng-show="sensorInfo.sensorRegisterMode.times == 0">Регистрация началась</h3>
+
+            <h3 ng-show="sensorInfo.sensorRegisterMode.times == 0">Приложите палец <img src="sources/loading-small.gif">
+            </h3>
+
+            <div ng-show="sensorInfo.sensorRegisterMode.times != 0">
+
+                <h3 ng-show="sensorInfo.sensorRegisterMode.times > 1">Приложите палец еще
+                    {{sensorInfo.sensorRegisterMode.times}} раза <img src="sources/loading-small.gif"></h3>
+
+                <h3 ng-show="sensorInfo.sensorRegisterMode.times <2">Приложите палец еще
+                    {{sensorInfo.sensorRegisterMode.times}} раз <img src="sources/loading-small.gif"></h3>
+
+                <h3>Качество последнего отпечатка: {{sensorInfo.sensorRegisterMode.quality}}</h3>
+            </div>
+        </div>
+        <div ng-if="!sensorInfo.sensorRegisterMode.status && sensorInfo.sensorRegisterMode.success">
+            <h3>Регистрация успешно завершена</h3>
+        </div>
+        <div ng-if="!sensorInfo.sensorRegisterMode.status && !sensorInfo.sensorRegisterMode.success">
+            <h3>При регистрации возникла ошибка</h3>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success"
+                ng-disabled="sensorInfo.sensorRegisterMode.status && !sensorInfo.sensorRegisterMode.success"
+                type="button" ng-click="ok()">Сохранить <span class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-default"
+                ng-disabled="sensorInfo.sensorRegisterMode.status && sensorInfo.sensorRegisterMode.success"
+                type="button" ng-click="repeat()">Повторить <span class="glyphicon glyphicon-repeat"></span></button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отменить <span style="top: 2.5px"
+                                                                                        class="glyphicon glyphicon-remove"></span>
+        </button>
+    </div>
+</script>
+<div class="container-fluid">
+    <div class="col-md-12" ng-show="!administrationClientsViewCtrl.selectedClient">
+        <div class="row">
+            <div class="col-md-offset-10 col-md-2">
+                <button class="btn btn-primary pull-right" ng-click="administrationClientsViewCtrl.onAddClient()">
+                    Добавить <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+        <br>
+        <table st-table="administrationClientsViewCtrl.clientsList" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th st-sort="id_client">Фамилия</th>
+                <th st-sort="name">Имя</th>
+                <th st-sort="patronymic">Отчество</th>
+                <th st-sort="date_of_birth">Дата рождения</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>
+                    <input st-search="surname" placeholder="Поиск по фамилии"
+                           class="input-sm form-control" type="search"/>
+                </th>
+                <th>
+                    <input st-search="name" placeholder="Поиск по имени" class="input-sm form-control"
+                           type="search"/>
+                </th>
+                <th>
+                    <input st-search="patronymic" placeholder="Поиск по отчеству"
+                           class="input-sm form-control" type="search"/>
+                </th>
+                <th>
+                    <input st-search="date_of_birth" placeholder="Поиск по дате рождения"
+                           class="input-sm form-control" type="search"/>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="clicking-table-row"
+                ng-repeat="row in administrationClientsViewCtrl.clientsList"
+                ng-click="administrationClientsViewCtrl.onSelectClient(row)">
+                <td>{{row.id_client}}</td>
+                <td ng-show="!administrationClientsViewCtrl.selectedClient">{{row.surname}}</td>
+                <td>{{row.name}}</td>
+                <td>{{row.patronymic}}</td>
+                <td>{{row.date_of_birth | date:'dd.MM.yyyy'}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4" ng-show="administrationClientsViewCtrl.selectedClient">
+        <table st-table="administrationClientsViewCtrl.clientsList" class="table table-bordered">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th st-sort="id_client">Фамилия</th>
+                <th st-sort="name">Имя</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>
+                    <input st-search="surname" placeholder="Поиск по фамилии"
+                           class="input-sm form-control" type="search"/>
+                </th>
+                <th>
+                    <input st-search="name" placeholder="Поиск по имени" class="input-sm form-control"
+                           type="search"/>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="clicking-table-row"
+                ng-class="{'clicking-table-row-active': administrationClientsViewCtrl.selectedClient.id_client==row.id_client}"
+                ng-repeat="row in administrationClientsViewCtrl.clientsList"
+                ng-click="administrationClientsViewCtrl.onSelectClient(row)">
+                <td>{{row.id_client}}</td>
+                <td>{{row.surname}}</td>
+                <td>{{row.name}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-8" ng-show="administrationClientsViewCtrl.selectedClient">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Клиент
+                    <span style="color:#337ab7"><b>{{administrationClientsViewCtrl.selectedClient.name}}</b></span>
+                </h3>
+            </div>
+            <div class="col-md-4">
+                <div class="pull-right">
+                    <button ng-show="!administrationClientsViewCtrl.readOnly" class="btn btn-default"
+                            ng-click="administrationClientsViewCtrl.onEditModeSwitch()"
+                            tooltip="Редактировать"
+                            tooltip-placement="top"
+                            tooltip-trigger="mouseenter">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                    </button>
+                    <button ng-show="administrationClientsViewCtrl.readOnly" class="btn btn-success"
+                            ng-click="administrationClientsViewCtrl.onSaveButtonClick()"
+                            tooltip="Сохранить"
+                            tooltip-placement="top"
+                            tooltip-trigger="mouseenter">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    </button>
+                    <button ng-show="administrationClientsViewCtrl.readOnly" class="btn btn-warning"
+                            ng-click="administrationClientsViewCtrl.onCancelButtonClick()"
+                            tooltip="Отменить"
+                            tooltip-placement="top"
+                            tooltip-trigger="mouseenter">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn btn-danger"
+                            tooltip="Удалить"
+                            tooltip-placement="top"
+                            tooltip-trigger="mouseenter"
+                            ng-click="administrationClientsViewCtrl.onDeleteButtonClick();">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-default"
+                            tooltip="Закрыть"
+                            tooltip-placement="top"
+                            tooltip-trigger="mouseenter"
+                            ng-click="administrationClientsViewCtrl.onSelectClient(false)">
+                        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!--<button class="button button-danger" ng-click="administrationClientsViewCtrl.testSendImage()">TEST</button>-->
+        <div class="row">
+            <div id="general-local-view" class="col-md-9"
+                 ng-show="administrationClientsViewCtrl.currentLocalViewInfo=='general'">
+                <div class="col-md-5">
+                    <div class="col-md-12">
+                        <div class="text-right" ng-show="administrationClientsViewCtrl.readOnly">
+                            <span class="glyphicon glyphicon-pencil cursor-pointer"
+                                  aria-hidden="true"
+                                  ng-click="administrationClientsViewCtrl.onEditPhotoButtonClick()"
+                                  tooltip="Редактировать фотографию"
+                                  tooltip-placement="top"
+                                  tooltip-trigger="mouseenter">
+                            </span>
+                        </div>
+                        <div class="text-center">
+                            <!--<div class="photo-preview-rounded">-->
+                            <img class="photo-preview-rounded"
+                                 ng-src="{{administrationClientsViewCtrl.selectedClient.photo_file}}">
+                            <!--</div>-->
+                        </div>
+                    </div>
+                    <br>
+
+                    <!--<div class="status" id="status">-->
+                    <!--<div class="col-md-12">-->
+                    <!--<br>-->
+                    <!--<div class="form-group text-center" ng-show="administrationClientsViewCtrl.readOnly">-->
+                    <!--<label for="status-select">Статус</label>-->
+                    <!--<select class="form-control" ng-model="administrationClientsViewCtrl.selectedClient.status" id="status-select" ng-change="administrationClientsViewCtrl.onFieldChange('status')">-->
+                    <!--<option>dismissed</option>-->
+                    <!--<option>active</option>-->
+                    <!--<option>vacation</option>-->
+                    <!--</select>-->
+                    <!--</div>-->
+                    <!--&lt;!&ndash;<div class="text-right" ng-show="administrationClientsViewCtrl.readOnly">&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span class="glyphicon glyphicon-pencil text-left cursor-pointer" aria-hidden="true"&ndash;&gt;-->
+                    <!--&lt;!&ndash;ng-click="administrationClientsViewCtrl.onEditStatusButtonClick()"&ndash;&gt;-->
+                    <!--&lt;!&ndash;tooltip="Редактировать статус"&ndash;&gt;-->
+                    <!--&lt;!&ndash;tooltip-placement="top"&ndash;&gt;-->
+                    <!--&lt;!&ndash;tooltip-trigger="mouseenter">&ndash;&gt;-->
+                    <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--<div class="text-center" ng-show="!administrationClientsViewCtrl.readOnly">-->
+                    <!--<label class="label label-danger"-->
+                    <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='dismissed'"><span-->
+                    <!--style="font-size: 13px">Уволен </span></label>-->
+                    <!--<label class="label label-success"-->
+                    <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='active'"><span-->
+                    <!--style="font-size: 15px"> Активен </span></label>-->
+                    <!--<label class="label label-warning"-->
+                    <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='vacation'"><span-->
+                    <!--style="font-size: 15px"> В отпуске </span></label>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="status" id="status-editing" ng-show="administrationClientsViewCtrl.readOnly">-->
+                    <!--<div class="col-md-1">-->
+                    <!--<span class="glyphicon glyphicon-pencil pull-right cursor-pointer" aria-hidden="true"-->
+                    <!--ng-click="administrationClientsViewCtrl.onEditStatusButtonClick()"-->
+                    <!--tooltip="Редактировать статус"-->
+                    <!--tooltip-placement="top"-->
+                    <!--tooltip-trigger="mouseenter">-->
+                    <!--</span>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-11 text-center">-->
+                    <!--<span>-->
+                    <!--<label class="label label-danger"-->
+                    <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='dismissed'"><span-->
+                    <!--style="font-size: 13px">Уволен {{administrationClientsViewCtrl.selectedClient.dismissal_date | date:'dd.MM.yyyy'}} <br> Причина: {{administrationClientsViewCtrl.selectedClient.dismissed_cause}} </span>-->
+                    <!--</label>-->
+                    <!--<label class="label label-success"-->
+                    <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='active'"><span-->
+                    <!--style="font-size: 15px"> Активен </span></label>-->
+                    <!--<label class="label label-warning"-->
+                    <!--ng-show="administrationClientsViewCtrl.selectedClient.status=='vacation'"><span-->
+                    <!--style="font-size: 15px"> В отпуске </span></label>-->
+                    <!--</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+
+
+                </div>
+                <div class="col-md-7">
+                    <div class="form-group form-group-sm">
+                        <label for="surname">Фамилия</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="surname" placeholder="Фамилия"
+                               ng-model="administrationClientsViewCtrl.selectedClient.surname"
+                               ng-change="administrationClientsViewCtrl.onFieldChange('surname')">
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="name">Имя</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="name" placeholder="Имя"
+                               ng-model="administrationClientsViewCtrl.selectedClient.name"
+                               ng-change="administrationClientsViewCtrl.onFieldChange('name')">
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label for="middleName">Отчество</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="middleName" placeholder="Отчество"
+                               ng-model="administrationClientsViewCtrl.selectedClient.patronymic"
+                               ng-change="administrationClientsViewCtrl.onFieldChange('patronymic')">
+                    </div>
+
+                    <div class="form-group form-group-sm">
+                        <label for="bornDate">Дата рождения</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="date" class="form-control"
+                               id="bornDate"
+                               ng-model="administrationClientsViewCtrl.selectedClient.date_of_birth"
+                               ng-change="administrationClientsViewCtrl.onFieldChange('date_of_birth')">
+                    </div>
+                    <div class="form-group form-group-sm">
+                        <label for="bornDate" style="margin-right: 5px">Пол:</label>
+                        <label class="radio-inline">
+                            <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="radio" name="gender"
+                                   id="gender1" value="male"
+                                   ng-model="administrationClientsViewCtrl.selectedClient.gender"
+                                   ng-change="administrationClientsViewCtrl.onFieldChange('gender')"> муж.
+                        </label>
+                        <label class="radio-inline">
+                            <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="radio"
+                                   name="inlineRadioOptions" id="gender2" value="female"
+                                   ng-model="administrationClientsViewCtrl.selectedClient.gender"
+                                   ng-change="administrationClientsViewCtrl.onFieldChange('gender')"> жен.
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="register-by">Сотрудник проводивший регистрацию</label>
+
+                        <input ng-readonly="true" type="text" class="form-control"
+                               id="register-by"
+                               value="{{administrationClientsViewCtrl.selectedClient.registered_by.role}} {{administrationClientsViewCtrl.selectedClient.registered_by.surname}} {{administrationClientsViewCtrl.selectedClient.registered_by.name}}">
+                        <!--<span class="input-group-btn">-->
+                        <!--<button class="btn btn-default" type="button"-->
+                        <!--tooltip="Показать анкету сотрудника"-->
+                        <!--tooltip-placement="top"-->
+                        <!--tooltip-trigger="mouseenter"-->
+                        <!--ng-click="administrationClientsViewCtrl.showEmployeeById(administrationClientsViewCtrl.selectedClient.registered_by.id_employee)">-->
+                        <!--<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></button>-->
+
+                        <!--</span>-->
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="deposit"><br>Депозит</label>
+
+                        <div class="input-group input-group-sm">
+                            <input ng-readonly="true" type="text" class="form-control"
+                                   id="deposit"
+                                   value="{{administrationClientsViewCtrl.selectedClient.deposit}}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button"
+                                    tooltip="Пополнить"
+                                    tooltip-placement="top"
+                                    tooltip-trigger="mouseenter"
+                                    ng-click="administrationClientsViewCtrl.onOpenDepositModal()">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label for="comment">Комментарий</label>
+                        <textarea ng-readonly="!administrationClientsViewCtrl.readOnly" type="text"
+                                  class="form-control"
+                                  id="comment" placeholder="Комментарий"
+                                  ng-model="administrationClientsViewCtrl.selectedClient.comment"
+                                  ng-change="administrationClientsViewCtrl.onFieldChange('comment')"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div id="passport-local-view" class="col-md-9"
+                 ng-show="administrationClientsViewCtrl.currentLocalViewInfo=='passport'">
+                <h4>Паспортные данные</h4>
+
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-serial">Серия</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-serial" placeholder="1234" maxlength="4"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.serial">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-number">Номер</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-number" placeholder="123456" maxlength="6"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.number">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-date">Дата выдачи</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="date" class="form-control"
+                               id="passport-date"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.date">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-department-code">Код подраз.</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-department-code"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.department_code">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-department">Кем выдан</label>
+                        <textarea ng-readonly="!administrationClientsViewCtrl.readOnly" type="text"
+                                  class="form-control" id="passport-department"
+                                  placeholder="УФМС России ..." maxlength="6"
+                                  ng-model="administrationClientsViewCtrl.selectedClient.passport.department">
+                            </textarea>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-place-birth">Место рождения</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-place-birth"
+                               placeholder="УФМС России ..."
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.place_birth">
+                    </div>
+                </div>
+                <h4>Регистрация</h4>
+
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-registration-region">Регион</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-registration-region"
+                               placeholder="Ленинградский"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.registration_region">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-registration-locality">Населенный пункт</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-registration-locality"
+                               placeholder="Ленинград"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.registration_locality">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-registration-street">Улица</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-registration-street"
+                               placeholder="Невский проспект"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.registration_street">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-registration-house">Дом/корпус</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-registration-house"
+                               placeholder="10"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.registration_street_house">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-registration-flat">Квартира</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="passport-registration-flat"
+                               placeholder="20"
+                               ng-model="administrationClientsViewCtrl.selectedClient.passport.registration_street_flat">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group form-group-sm">
+                        <label for="passport-registration-department">Кем зарегистрирован</label>
+                        <textarea ng-readonly="!administrationClientsViewCtrl.readOnly" type="text"
+                                  class="form-control" id="passport-registration-department"
+                                  placeholder="УФМС России ..." maxlength="6"
+                                  ng-model="administrationClientsViewCtrl.selectedClient.passport.registration_department">
+                            </textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact-local-view" class="col-md-9"
+                 ng-show="administrationClientsViewCtrl.currentLocalViewInfo=='contact'">
+                <h4>Контактная информация</h4>
+
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="tel">Моб. телефон</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly"
+                               ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="tel" placeholder="89992071024"
+                               ng-model="administrationClientsViewCtrl.selectedClient.tel">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="tel1">Доп. телефон</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly"
+                               ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="tel1" placeholder="89992071024"
+                               ng-model="administrationClientsViewCtrl.selectedClient.tel1">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="email">E-mail</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly"
+                               ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="email" placeholder="examole@mail.ru"
+                               ng-model="administrationClientsViewCtrl.selectedClient.email">
+                    </div>
+                </div>
+            </div>
+
+            <div id="season-tickets-local-view" class="col-md-9"
+                 ng-show="administrationClientsViewCtrl.currentLocalViewInfo=='season_tickets'">
+                <h4>Абонементы</h4>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Тип
+                        </th>
+                        <th>
+                            Статус
+                        </th>
+                        <th>
+                            Дата активации
+                        </th>
+                        <th>
+                            Дата окончания
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="clicking-table-row"
+                        ng-repeat="row in administrationClientsViewCtrl.selectedClient.season_tickets">
+                        <td>
+                            {{row.id_season_ticket}}
+                        </td>
+                        <td>
+                            {{row.type}}
+                        </td>
+                        <td>
+                            {{row.status}}
+                        </td>
+                        <td>
+                            {{row.activation_date}}
+                        </td>
+                        <td>
+                            {{row.expiration_date}}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <!--<div class="col-md-6">-->
+                <!--<div class="form-group form-group-sm">-->
+                <!--<label for="login">Логин</label>-->
+                <!--<input ng-readonly="!administrationClientsViewCtrl.readOnly"-->
+                <!--ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"-->
+                <!--id="login" placeholder="login"-->
+                <!--ng-model="administrationClientsViewCtrl.selectedClient.login"-->
+                <!--ng-change="administrationClientsViewCtrl.onFieldChange('login')">-->
+                <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-md-6">-->
+                <!--<div class="form-group form-group-sm">-->
+                <!--<label for="password">Пароль</label>-->
+                <!--<input ng-readonly="!administrationClientsViewCtrl.readOnly"-->
+                <!--ng-readonly="!administrationClientsViewCtrl.readOnly" type="password"-->
+                <!--class="form-control"-->
+                <!--id="password" placeholder="password"-->
+                <!--ng-model="administrationClientsViewCtrl.selectedClient.password"-->
+                <!--ng-change="administrationClientsViewCtrl.onFieldChange('password')">-->
+                <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div id="auth-local-view" class="col-md-9"
+                 ng-show="administrationClientsViewCtrl.currentLocalViewInfo=='auth'">
+                <h4>Учетная запись</h4>
+
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="login">Логин</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly"
+                               ng-readonly="!administrationClientsViewCtrl.readOnly" type="text" class="form-control"
+                               id="login" placeholder="login"
+                               ng-model="administrationClientsViewCtrl.selectedClient.login"
+                               ng-change="administrationClientsViewCtrl.onFieldChange('login')">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="password">Пароль</label>
+                        <input ng-readonly="!administrationClientsViewCtrl.readOnly"
+                               ng-readonly="!administrationClientsViewCtrl.readOnly" type="password"
+                               class="form-control"
+                               id="password" placeholder="password"
+                               ng-model="administrationClientsViewCtrl.selectedClient.password"
+                               ng-change="administrationClientsViewCtrl.onFieldChange('password')">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-offset-1 col-md-1 pull-right">
+                <div class="btn-group-vertical" role="group">
+                    <button class="btn btn-default"
+                            tooltip="Общая информация"
+                            tooltip-placement="left"
+                            tooltip-trigger="mouseenter"
+                            ng-click="administrationClientsViewCtrl.onChangeLocalView('general')"
+                            ng-class="{'active': administrationClientsViewCtrl.currentLocalViewInfo=='general'}">
+                        <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn btn-default"
+                            tooltip="Паспортные данные"
+                            tooltip-placement="left"
+                            tooltip-trigger="mouseenter"
+                            ng-click="administrationClientsViewCtrl.onChangeLocalView('passport')"
+                            ng-class="{'active': administrationClientsViewCtrl.currentLocalViewInfo=='passport'}">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn btn-default"
+                            tooltip="Контактная информация"
+                            tooltip-placement="left"
+                            tooltip-trigger="mouseenter"
+                            ng-click="administrationClientsViewCtrl.onChangeLocalView('contact')"
+                            ng-class="{'active': administrationClientsViewCtrl.currentLocalViewInfo=='contact'}">
+                        <span class="glyphicon glyphicon-earphone" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn btn-default"
+                            tooltip="Учётная запись"
+                            tooltip-placement="left"
+                            tooltip-trigger="mouseenter"
+                            ng-click="administrationClientsViewCtrl.onChangeLocalView('auth')"
+                            ng-class="{'active': administrationClientsViewCtrl.currentLocalViewInfo=='auth'}">
+                        <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
+                    </button>
+                    <button class="btn btn-default"
+                            tooltip="Абонементы"
+                            tooltip-placement="left"
+                            tooltip-trigger="mouseenter"
+                            ng-click="administrationClientsViewCtrl.onChangeLocalView('season_tickets')"
+                            ng-class="{'active': administrationClientsViewCtrl.currentLocalViewInfo=='season_tickets'}">
+                        <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                    </button>
+                    <!--<button ng-disabled="!clientsRegViewCtrl.sensorInfo.sensorIsInit || !clientsRegViewCtrl.sensorInfo.bridgeIsConnected || !clientsRegViewCtrl.sensorInfo.sensorIsConnected"-->
+                    <!--class="btn btn-default"-->
+                    <!--ng-click="clientsRegViewCtrl.openSensorModalWindowBtnClick('')">-->
+                    <!--Отпечаток &nbsp; <span class="glyphicon glyphicon-hand-right"></span>-->
+                    <!--</button>-->
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+            </div>
+        </div>
+    </div>
+</div>
+

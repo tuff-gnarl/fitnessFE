@@ -1,0 +1,350 @@
+<!--/**-->
+<!--* Created by Tuff_gnarl1 on 19.09.15.-->
+<!--*/-->
+
+<!--ModalSensorView-->
+<script type="text/ng-template" id="ModalSensorView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Регистрация отпечатка пальца</h3>
+    </div>
+    <div class="modal-body">
+        <div ng-show="sensorInfo.sensorRegisterMode.status">
+            <h3 ng-show="sensorInfo.sensorRegisterMode.times == 0">Регистрация началась</h3>
+
+            <h3 ng-show="sensorInfo.sensorRegisterMode.times == 0">Приложите палец <img src="sources/loading-small.gif">
+            </h3>
+
+            <div ng-show="sensorInfo.sensorRegisterMode.times != 0">
+
+                <h3 ng-show="sensorInfo.sensorRegisterMode.times > 1">Приложите палец еще
+                    {{sensorInfo.sensorRegisterMode.times}} раза <img src="sources/loading-small.gif"></h3>
+
+                <h3 ng-show="sensorInfo.sensorRegisterMode.times <2">Приложите палец еще
+                    {{sensorInfo.sensorRegisterMode.times}} раз <img src="sources/loading-small.gif"></h3>
+
+                <h3>Качество последнего отпечатка: {{sensorInfo.sensorRegisterMode.quality}}</h3>
+            </div>
+        </div>
+        <div ng-if="!sensorInfo.sensorRegisterMode.status && sensorInfo.sensorRegisterMode.success">
+            <h3>Регистрация успешно завершена</h3>
+        </div>
+        <div ng-if="!sensorInfo.sensorRegisterMode.status && !sensorInfo.sensorRegisterMode.success">
+            <h3>При регистрации возникла ошибка</h3>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success"
+                ng-disabled="sensorInfo.sensorRegisterMode.status && !sensorInfo.sensorRegisterMode.success"
+                type="button" ng-click="ok()">Сохранить <span class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-default"
+                ng-disabled="sensorInfo.sensorRegisterMode.status && sensorInfo.sensorRegisterMode.success"
+                type="button" ng-click="repeat()">Повторить <span class="glyphicon glyphicon-repeat"></span></button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отменить <span style="top: 2.5px"
+                                                                                        class="glyphicon glyphicon-remove"></span>
+        </button>
+    </div>
+</script>
+<!--ModalServicesView-->
+<script type="text/ng-template" id="ModalServicesView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Выбор услуг клиента</h3>
+    </div>
+    <div class="modal-body">
+        <div class="dnd-lists-case row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    Доступные услуги
+                                </div>
+                            </div>
+                            <ul dnd-list="availableServices">
+                                <li ng-repeat="aService in availableServices"
+                                    dnd-draggable="aService"
+                                    dnd-moved="availableServices.splice($index, 1)"
+                                    dnd-effect-allowed="move">
+                                    {{aService.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="panel panel-success">
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    Выбранные услуги
+                                </div>
+                            </div>
+                            <ul dnd-list="choosedServices">
+                                <li ng-repeat="cService in choosedServices"
+                                    dnd-draggable="cService"
+                                    dnd-moved="choosedServices.splice($index, 1)"
+                                    dnd-effect-allowed="move">
+                                    {{cService.name}}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="button" ng-click="ok()">Сохранить <span
+                class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отменить <span style="top: 2.5px"
+                                                                                        class="glyphicon glyphicon-remove"></span>
+        </button>
+    </div>
+</script>
+<!--ModalPhotoView-->
+<script type="text/ng-template" id="ModalPhotoView.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Фото клиента</h3>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                <!--<a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>-->
+                <ng-camera ng-show="!photo"
+                           output-height="470"
+                           output-width="570"
+                           viewer-height="530"
+                           viewer-width="560"
+                           crop-height="470"
+                           crop-width="560"
+                           image-format="jpeg"
+                           jpeg-quality="220"
+                           action-message="Take picture"
+                           snapshot="photo"
+                           flash-fallback-url="/vendors/webcamjs/webcam.swf"></ng-camera>
+                <img class="client-photo-modal-frame" ng-show="photo" ng-src="{{photo}}" alt="webcam picture">
+                <button class="btn btn-default" ng-show="photo" ng-click="retakePhoto()">Переснять <span
+                        style="top: 2.4px"
+                        class="glyphicon glyphicon-facetime-video"></span></button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button ng-disabled="!photo" class="btn btn-success" type="button" ng-click="ok()">Сохранить <span
+                class="glyphicon glyphicon-ok"></span></button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Отменить <span style="top: 2.5px"
+                                                                                        class="glyphicon glyphicon-remove"></span></span>
+        </button>
+    </div>
+</script>
+<!--Sensor slideout-->
+<div id="slideout">
+    <div id="slideText">Датчик</div>
+    <div id="slideout_inner">
+        <div class="row">
+            <div class="col-md-12 text-align-center">
+                <div ng-show="clientsRegViewCtrl.sensorInfo.sensorIsInit && clientsRegViewCtrl.sensorInfo.bridgeIsConnected && clientsRegViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-success">Активен и готов к работе</label>
+                    </h4>
+                </div>
+
+                <div ng-show="!clientsRegViewCtrl.sensorInfo.sensorIsInit && clientsRegViewCtrl.sensorInfo.bridgeIsConnected && clientsRegViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-danger">Не активен</label>
+                    </h4>
+                </div>
+
+                <div ng-show="clientsRegViewCtrl.sensorInfo.bridgeIsConnected && !clientsRegViewCtrl.sensorInfo.sensorIsConnected">
+                    <h4>
+                        <label class="label label-danger">Ошибка соединения.Код 2.</label>
+                    </h4>
+                </div>
+                <div ng-show="!clientsRegViewCtrl.sensorInfo.bridgeIsConnected && !clientsRegViewCtrl.sensorInfo.sensorIsConnected && !clientsRegViewCtrl.sensorInfo.sensorIsInit">
+                    <h4>
+                        <label class="label label-danger">Ошибка соединения. Код 1.</label>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button ng-disabled="!clientsRegViewCtrl.sensorInfo.bridgeIsConnected || !clientsRegViewCtrl.sensorInfo.sensorIsConnected"
+                        ng-show="!clientsRegViewCtrl.sensorInfo.sensorIsInit" class="btn btn-success"
+                        ng-click="clientsRegViewCtrl.connectSensorBtnClick()">Активировать
+                </button>
+                <button ng-show="clientsRegViewCtrl.sensorInfo.sensorIsInit && clientsRegViewCtrl.sensorInfo.bridgeIsConnected && clientsRegViewCtrl.sensorInfo.sensorIsConnected"
+                        ng-click="clientsRegViewCtrl.connectSensorBtnClick()" class="btn btn-danger">Деактивировать
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h4>Регистрация клиента</h4>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row text-align-center">
+                        <img class="client-photo" ng-src="{{clientsRegViewCtrl.client.photo}}" alt="webcam picture">
+                    </div>
+                    <div class="row text-align-center">
+                        <button class="btn btn-default" style="width: 90%"
+                                ng-click="clientsRegViewCtrl.openCamModalWindowBtnClick('')">
+                            Снять/Переснять &nbsp; <span style="top: 2.4px"
+                                                         class="glyphicon glyphicon-facetime-video"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="surname">Фамилия</label>
+                        <input type="text" class="form-control" id="surname" placeholder="Фамилия"
+                               ng-model="clientsRegViewCtrl.client.surname">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">Имя</label>
+                        <input type="text" class="form-control" id="name" placeholder="Имя"
+                               ng-model="clientsRegViewCtrl.client.name">
+                    </div>
+                    <!-- TODO регулярка-->
+
+                    <div class="form-group">
+                        <label for="middleName">Отчество</label>
+                        <input type="text" class="form-control" id="middleName" placeholder="Отчество"
+                               ng-model="clientsRegViewCtrl.client.middleName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bornDate">Дата рождения</label>
+                        <input type="date" class="form-control" id="bornDate"
+                               ng-model="clientsRegViewCtrl.client.bornDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="bornDate" style="margin-right: 5px">Пол:</label>
+                        <label class="radio-inline">
+                            <input type="radio" name="gender" id="gender1" value="male"
+                                   ng-model="clientsRegViewCtrl.client.gender"> муж.
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="inlineRadioOptions" id="gender2" value="female"
+                                   ng-model="clientsRegViewCtrl.client.gender"> жен.
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="row">-->
+            <!--<div class="form-group">-->
+            <!--<div class="col-md-6">-->
+            <!--<label for="passportNumber">Серия и номер паспорта</label>-->
+            <!--<input type="text" class="form-control" id="passportNumber" placeholder="Серия номер"-->
+            <!--ng-model="clientsRegViewCtrl.client.passportNumber">-->
+            <!--</div>-->
+            <!--<div class="col-md-6">-->
+            <!--<div class="form-group">-->
+            <!--<label for="passportDateofIssue">Дата выдачи</label>-->
+            <!--<input type="date" class="form-control" id="passportDateofIssue" placeholder="Серия номер"-->
+            <!--ng-model="clientsRegViewCtrl.client.passportDateofIssue">-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label for="passportIssuedBy">Кем выдан паспорт</label>-->
+            <!--<textarea type="text" class="form-control" id="passportIssuedBy"-->
+            <!--placeholder="Наименование органа выдавшего паспорт"-->
+            <!--ng-model="clientsRegViewCtrl.client.passportIssuedBy"></textarea>-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label for="passportBirthPlace">Место рождения</label>-->
+            <!--<input type="text" class="form-control" id="passportBirthPlace" placeholder="Страна, населенный пункт"-->
+            <!--ng-model="clientsRegViewCtrl.client.passportBirthPlace">-->
+            <!--</div>-->
+            <!--<div class="form-group">-->
+            <!--<label for="passportRegistration">Сведения о регистрации</label>-->
+            <!--<textarea type="text" class="form-control" id="passportRegistration"-->
+            <!--placeholder="АОВФЛАОВЛФОАЛДВЫОЛДОАЛДВЫОЛДАОЛВДЫОЛДА"-->
+            <!--ng-model="clientsRegViewCtrl.client.passportRegistration"></textarea>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</div>-->
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="telNumber">Номер телефона</label>
+                        <input type="text" class="form-control" id="telNumber" placeholder="Номер телефона"
+                               ng-model="clientsRegViewCtrl.client.telNumber">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="telNumber">E-mail</label>
+                        <input type="email" class="form-control" id="email" placeholder="email@mail.com"
+                               ng-model="clientsRegViewCtrl.client.email">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="infoFrom">Откуда узнал о клубе</label>
+                        <select id="infoFrom" class="form-control"
+                                ng-model="clientsRegViewCtrl.client.infoFrom">
+                            <option>Из интернета</option>
+                            <option>Рекалама</option>
+                            <option>Привел тренер</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="coach">Имя тренера</label>
+                    <select ng-disabled="clientsRegViewCtrl.client.infoFrom!='Привел тренер'" id="coach"
+                            class="form-control" ng-model="clientsRegViewCtrl.client.coach">
+                        <option>Иванов С.П.</option>
+                        <option>Петров И.В.</option>
+                        <option>Сидоров С.В.</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="comment">Комментарий</label>
+                    <textarea type="text" class="form-control" id="comment"
+                              placeholder="Комментарий"
+                              ng-model="clientsRegViewCtrl.client.comment"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="panel-footer">
+    <div class="row">
+        <div class="col-md-6">
+            <button class="btn btn-default"
+                    ng-click="clientsRegViewCtrl.openServicesModalWindowBtnClick('')">
+                Услуги&nbsp; <span class="glyphicon glyphicon-indent-left"></span>
+            </button>
+            <button ng-disabled="!clientsRegViewCtrl.sensorInfo.sensorIsInit || !clientsRegViewCtrl.sensorInfo.bridgeIsConnected || !clientsRegViewCtrl.sensorInfo.sensorIsConnected"
+                    class="btn btn-default"
+                    ng-click="clientsRegViewCtrl.openSensorModalWindowBtnClick('')">
+                Отпечаток &nbsp; <span class="glyphicon glyphicon-hand-right"></span>
+            </button>
+        </div>
+        <div class="col-md-6 text-align-right">
+            <button class="btn btn-success" ng-click="clientsRegViewCtrl.safeClientBtnClick()">
+                Сохранить <span class="glyphicon glyphicon-ok"></span>
+            </button>
+            <button class="btn btn-danger" ng-click="clientsRegViewCtrl.cancelClientBtnClick()">
+                Отменить <span style="top: 2.5px" class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
+    </div>
+</div>
